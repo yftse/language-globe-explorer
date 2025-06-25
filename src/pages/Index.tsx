@@ -1,12 +1,132 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import MapboxTokenInput from '@/components/MapboxTokenInput';
+import InteractiveMap from '@/components/InteractiveMap';
+import FilterDropdown from '@/components/FilterDropdown';
+import SearchBar from '@/components/SearchBar';
+import LanguageListView from '@/components/LanguageListView';
+import LanguageDetail from '@/components/LanguageDetail';
+import { mockLanguages, classificationFilters } from '@/data/mockLanguages';
+import { Language, FilterType } from '@/types/language';
+import { Menu, Map } from 'lucide-react';
 
 const Index = () => {
+  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>('family');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isListView, setIsListView] = useState<boolean>(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+
+  // Filter languages based on search query
+  const filteredLanguages = useMemo(() => {
+    if (!searchQuery.trim()) return mockLanguages;
+    
+    const query = searchQuery.toLowerCase();
+    return mockLanguages.filter(lang =>
+      lang.name.toLowerCase().includes(query) ||
+      lang.family.toLowerCase().includes(query) ||
+      lang.branch.toLowerCase().includes(query) ||
+      lang.region.toLowerCase().includes(query) ||
+      lang.alternativeNames.some(name => name.toLowerCase().includes(query))
+    );
+  }, [searchQuery]);
+
+  const handleLanguageClick = (language: Language) => {
+    setSelectedLanguage(language);
+  };
+
+  const handleBackToMap = () => {
+    setSelectedLanguage(null);
+  };
+
+  // Show token input if no token is provided
+  if (!mapboxToken) {
+    return <MapboxTokenInput onTokenSubmit={setMapboxToken} />;
+  }
+
+  // Show language detail if a language is selected
+  if (selectedLanguage) {
+    return <LanguageDetail language={selectedLanguage} onBack={handleBackToMap} />;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200 p-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-gray-900">LinguaMap</h1>
+            <Badge variant="secondary" className="hidden sm:inline-flex">
+              {filteredLanguages.length} languages
+            </Badge>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <SearchBar 
+              onSearch={setSearchQuery}
+              placeholder="Search languages, families, regions..."
+            />
+            <FilterDropdown
+              filters={classificationFilters}
+              selectedFilter={selectedFilter}
+              onFilterChange={setSelectedFilter}
+            />
+            <Button
+              variant={isListView ? "default" : "outline"}
+              onClick={() => setIsListView(!isListView)}
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              {isListView ? <Map className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              {isListView ? 'Map View' : 'List View'}
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 relative overflow-hidden">
+        {isListView ? (
+          <div className="h-full overflow-auto p-4">
+            <LanguageListView 
+              languages={filteredLanguages}
+              onLanguageClick={handleLanguageClick}
+            />
+          </div>
+        ) : (
+          <div className="h-full relative">
+            <InteractiveMap
+              languages={filteredLanguages}
+              selectedFilter={selectedFilter}
+              mapboxToken={mapboxToken}
+              onLanguageClick={handleLanguageClick}
+            />
+            
+            {/* Map Legend */}
+            <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-xs">
+              <h3 className="font-semibold mb-2">
+                {classificationFilters.find(f => f.id === selectedFilter)?.name}
+              </h3>
+              <p className="text-sm text-gray-600 mb-2">
+                {classificationFilters.find(f => f.id === selectedFilter)?.description}
+              </p>
+              <div className="text-xs text-gray-500">
+                Click on language points to explore details • Zoom for more languages
+              </div>
+            </div>
+
+            {/* Search Results Indicator */}
+            {searchQuery && (
+              <div className="absolute top-4 left-4 bg-white p-3 rounded-lg shadow-lg">
+                <p className="text-sm">
+                  <strong>{filteredLanguages.length}</strong> languages match "{searchQuery}"
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
 };
