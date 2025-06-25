@@ -2,7 +2,6 @@
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import MapboxTokenInput from '@/components/MapboxTokenInput';
 import InteractiveMap from '@/components/InteractiveMap';
 import FilterDropdown from '@/components/FilterDropdown';
 import SearchBar from '@/components/SearchBar';
@@ -12,8 +11,10 @@ import { mockLanguages, classificationFilters } from '@/data/mockLanguages';
 import { Language, FilterType } from '@/types/language';
 import { Menu, Map } from 'lucide-react';
 
+// Use the provided Mapbox token directly
+const MAPBOX_TOKEN = 'pk.eyJ1IjoieWZ0c2UiLCJhIjoiY21jYzJ6dG9yMDQzbDJsc2FjZTR4djhnaCJ9.N36trynl1ncmb-sMnOo_oA';
+
 const Index = () => {
-  const [mapboxToken, setMapboxToken] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('family');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isListView, setIsListView] = useState<boolean>(false);
@@ -40,11 +41,6 @@ const Index = () => {
   const handleBackToMap = () => {
     setSelectedLanguage(null);
   };
-
-  // Show token input if no token is provided
-  if (!mapboxToken) {
-    return <MapboxTokenInput onTokenSubmit={setMapboxToken} />;
-  }
 
   // Show language detail if a language is selected
   if (selectedLanguage) {
@@ -99,7 +95,7 @@ const Index = () => {
             <InteractiveMap
               languages={filteredLanguages}
               selectedFilter={selectedFilter}
-              mapboxToken={mapboxToken}
+              mapboxToken={MAPBOX_TOKEN}
               onLanguageClick={handleLanguageClick}
             />
             
@@ -112,7 +108,7 @@ const Index = () => {
                 {classificationFilters.find(f => f.id === selectedFilter)?.description}
               </p>
               <div className="text-xs text-gray-500">
-                Click on language points to explore details • Zoom for more languages
+                Click on language areas to explore details • Zoom for more languages
               </div>
             </div>
 

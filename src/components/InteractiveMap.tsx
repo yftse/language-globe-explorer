@@ -49,13 +49,95 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
 
-    // Remove existing sources and layers
-    if (map.current.getSource('languages')) {
-      map.current.removeLayer('languages-layer');
-      map.current.removeSource('languages');
-    }
+    console.log('Updating map with filter:', selectedFilter, 'and', languages.length, 'languages');
 
-    // Create GeoJSON data
+    // Safely remove existing sources and layers
+    const existingLayers = ['language-areas', 'language-areas-stroke', 'languages-layer', 'clusters', 'cluster-count'];
+    const existingSources = ['languages', 'language-areas'];
+
+    existingLayers.forEach(layerId => {
+      if (map.current?.getLayer(layerId)) {
+        try {
+          map.current.removeLayer(layerId);
+        } catch (error) {
+          console.log('Layer removal warning:', error);
+        }
+      }
+    });
+
+    existingSources.forEach(sourceId => {
+      if (map.current?.getSource(sourceId)) {
+        try {
+          map.current.removeSource(sourceId);
+        } catch (error) {
+          console.log('Source removal warning:', error);
+        }
+      }
+    });
+
+    // Create language areas (simplified polygons for visualization)
+    const languageAreas = {
+      type: 'FeatureCollection' as const,
+      features: languages.map(lang => {
+        const [lng, lat] = lang.coordinates;
+        // Create a simplified polygon around each language point for area visualization
+        const offset = 2; // Adjust this to make areas larger or smaller
+        return {
+          type: 'Feature' as const,
+          geometry: {
+            type: 'Polygon' as const,
+            coordinates: [[
+              [lng - offset, lat - offset],
+              [lng + offset, lat - offset],
+              [lng + offset, lat + offset],
+              [lng - offset, lat + offset],
+              [lng - offset, lat - offset]
+            ]]
+          },
+          properties: {
+            id: lang.id,
+            name: lang.name,
+            family: lang.family,
+            branch: lang.branch,
+            speakers: lang.speakers,
+            endangerment: lang.endangermentStatus,
+            region: lang.region,
+            color: getColorForValue(selectedFilter, getFilterValue(lang, selectedFilter))
+          }
+        }
+      })
+    };
+
+    // Add language areas source
+    map.current.addSource('language-areas', {
+      type: 'geojson',
+      data: languageAreas
+    });
+
+    // Add filled areas layer
+    map.current.addLayer({
+      id: 'language-areas',
+      type: 'fill',
+      source: 'language-areas',
+      paint: {
+        'fill-color': ['get', 'color'],
+        'fill-opacity': 0.6
+      }
+    });
+
+    // Add stroke layer for better visibility
+    map.current.addLayer({
+      id: 'language-areas-stroke',
+      type: 'line',
+      source: 'language-areas',
+      paint: {
+        'line-color': ['get', 'color'],
+        'line-width': 2,
+        'line-opacity': 0.8
+      }
+    });
+
+    // Create point data for fallback/clustering
     const geojsonData = {
       type: 'FeatureCollection' as const,
       features: languages.map(lang => ({
@@ -77,80 +159,28 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
       }))
     };
 
-    // Add source
+    // Add point source for labels and interaction backup
     map.current.addSource('languages', {
       type: 'geojson',
-      data: geojsonData,
-      cluster: true,
-      clusterMaxZoom: 8,
-      clusterRadius: 50
+      data: geojsonData
     });
 
-    // Add clustered points layer
-    map.current.addLayer({
-      id: 'clusters',
-      type: 'circle',
-      source: 'languages',
-      filter: ['has', 'point_count'],
-      paint: {
-        'circle-color': [
-          'step',
-          ['get', 'point_count'],
-          '#51bbd6',
-          5,
-          '#f1f075',
-          10,
-          '#f28cb1'
-        ],
-        'circle-radius': [
-          'step',
-          ['get', 'point_count'],
-          20,
-          5,
-          30,
-          10,
-          40
-        ]
-      }
-    });
-
-    // Add cluster count labels
-    map.current.addLayer({
-      id: 'cluster-count',
-      type: 'symbol',
-      source: 'languages',
-      filter: ['has', 'point_count'],
-      layout: {
-        'text-field': '{point_count_abbreviated}',
-        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 12
-      }
-    });
-
-    // Add individual points layer
+    // Add individual points layer (smaller, for labels)
     map.current.addLayer({
       id: 'languages-layer',
       type: 'circle',
       source: 'languages',
-      filter: ['!', ['has', 'point_count']],
       paint: {
         'circle-color': ['get', 'color'],
-        'circle-radius': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          2, 6,
-          10, 12,
-          15, 20
-        ],
-        'circle-stroke-width': 2,
+        'circle-radius': 4,
+        'circle-stroke-width': 1,
         'circle-stroke-color': '#ffffff',
-        'circle-opacity': 0.8
+        'circle-opacity': 0.9
       }
     });
 
-    // Add click handler for individual points
-    map.current.on('click', 'languages-layer', (e) => {
+    // Add click handlers
+    const handleAreaClick = (e: mapboxgl.MapMouseEvent) => {
       if (e.features && e.features[0]) {
         const feature = e.features[0];
         const languageId = feature.properties?.id;
@@ -159,50 +189,36 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
           onLanguageClick(language);
         }
       }
-    });
+    };
 
-    // Add click handler for clusters
-    map.current.on('click', 'clusters', (e) => {
-      if (!map.current || !e.features || !e.features[0]) return;
-      
-      const features = map.current.queryRenderedFeatures(e.point, {
-        layers: ['clusters']
-      });
-      
-      if (features[0] && features[0].properties) {
-        const clusterId = features[0].properties.cluster_id;
-        const source = map.current.getSource('languages') as mapboxgl.GeoJSONSource;
-        
-        source.getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (err || !map.current) return;
-          
-          const geometry = features[0].geometry;
-          if (geometry.type === 'Point') {
-            map.current.easeTo({
-              center: geometry.coordinates as [number, number],
-              zoom: zoom
-            });
-          }
-        });
-      }
-    });
+    map.current.on('click', 'language-areas', handleAreaClick);
+    map.current.on('click', 'languages-layer', handleAreaClick);
 
     // Change cursor on hover
-    map.current.on('mouseenter', 'languages-layer', () => {
+    const setCursorPointer = () => {
       if (map.current) map.current.getCanvas().style.cursor = 'pointer';
-    });
-
-    map.current.on('mouseleave', 'languages-layer', () => {
+    };
+    
+    const setCursorDefault = () => {
       if (map.current) map.current.getCanvas().style.cursor = '';
-    });
+    };
 
-    map.current.on('mouseenter', 'clusters', () => {
-      if (map.current) map.current.getCanvas().style.cursor = 'pointer';
-    });
+    map.current.on('mouseenter', 'language-areas', setCursorPointer);
+    map.current.on('mouseleave', 'language-areas', setCursorDefault);
+    map.current.on('mouseenter', 'languages-layer', setCursorPointer);
+    map.current.on('mouseleave', 'languages-layer', setCursorDefault);
 
-    map.current.on('mouseleave', 'clusters', () => {
-      if (map.current) map.current.getCanvas().style.cursor = '';
-    });
+    // Cleanup function for event listeners
+    return () => {
+      if (map.current) {
+        map.current.off('click', 'language-areas', handleAreaClick);
+        map.current.off('click', 'languages-layer', handleAreaClick);
+        map.current.off('mouseenter', 'language-areas', setCursorPointer);
+        map.current.off('mouseleave', 'language-areas', setCursorDefault);
+        map.current.off('mouseenter', 'languages-layer', setCursorPointer);
+        map.current.off('mouseleave', 'languages-layer', setCursorDefault);
+      }
+    };
 
   }, [languages, selectedFilter, mapLoaded, onLanguageClick]);
 
