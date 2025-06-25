@@ -3,11 +3,22 @@ import { FilterType } from '@/types/language';
 
 // Color schemes for different classification systems
 export const colorSchemes = {
+  language: {
+    'Spanish': '#3B82F6', // Blue
+    'Mandarin Chinese': '#EF4444', // Red
+    'Modern Standard Arabic': '#F59E0B', // Orange
+    'Berber (Tamazight)': '#8B5CF6', // Purple
+    'Basque': '#EC4899', // Pink
+    'Tibetan': '#10B981', // Green
+    'Uyghur': '#F97316', // Dark orange
+    'Japanese': '#6366F1', // Indigo
+    'default': '#6B7280' // Gray
+  },
   family: {
     'Indo-European': '#3B82F6', // Blue
     'Sino-Tibetan': '#EF4444', // Red
     'Afro-Asiatic': '#F59E0B', // Orange
-    'Quechuan': '#10B981', // Green
+    'Turkic': '#10B981', // Green
     'Language isolate': '#8B5CF6', // Purple
     'Japonic': '#EC4899', // Pink
     'default': '#6B7280' // Gray
@@ -15,10 +26,12 @@ export const colorSchemes = {
   branch: {
     'Romance': '#3B82F6',
     'Sinitic': '#EF4444',
+    'Tibetic': '#DC2626',
     'Semitic': '#F59E0B',
-    'Quechua I': '#10B981',
+    'Berber': '#8B5CF6',
+    'Southeastern Turkic': '#10B981',
     'Japanese': '#EC4899',
-    'N/A': '#8B5CF6',
+    'N/A': '#6B7280',
     'default': '#6B7280'
   },
   endangerment: {
@@ -39,6 +52,8 @@ export const colorSchemes = {
     'Americas': '#10B981',
     'Europe, Americas': '#6366F1',
     'Middle East, North Africa': '#F97316',
+    'Tibet, China': '#DC2626',
+    'Xinjiang, China': '#10B981',
     'default': '#6B7280'
   }
 };

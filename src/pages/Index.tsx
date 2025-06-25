@@ -2,23 +2,22 @@
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import InteractiveMap from '@/components/InteractiveMap';
+import InteractiveMapMapbox from '@/components/InteractiveMapMapbox';
+import InteractiveMapMaptiler from '@/components/InteractiveMapMaptiler';
 import FilterDropdown from '@/components/FilterDropdown';
 import SearchBar from '@/components/SearchBar';
 import LanguageListView from '@/components/LanguageListView';
 import LanguageDetail from '@/components/LanguageDetail';
 import { mockLanguages, classificationFilters } from '@/data/mockLanguages';
 import { Language, FilterType } from '@/types/language';
-import { Menu, Map } from 'lucide-react';
-
-// Use the provided Mapbox token directly
-const MAPBOX_TOKEN = 'pk.eyJ1IjoieWZ0c2UiLCJhIjoiY21jYzJ6dG9yMDQzbDJsc2FjZTR4djhnaCJ9.N36trynl1ncmb-sMnOo_oA';
+import { Menu, Map, Globe } from 'lucide-react';
 
 const Index = () => {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('family');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isListView, setIsListView] = useState<boolean>(false);
   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  const [mapProvider, setMapProvider] = useState<'mapbox' | 'maptiler'>('mapbox');
 
   // Filter languages based on search query
   const filteredLanguages = useMemo(() => {
@@ -70,6 +69,14 @@ const Index = () => {
               onFilterChange={setSelectedFilter}
             />
             <Button
+              variant={mapProvider === 'mapbox' ? "default" : "outline"}
+              onClick={() => setMapProvider(mapProvider === 'mapbox' ? 'maptiler' : 'mapbox')}
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Globe className="h-4 w-4" />
+              {mapProvider === 'mapbox' ? 'Switch to Maptiler' : 'Switch to Mapbox'}
+            </Button>
+            <Button
               variant={isListView ? "default" : "outline"}
               onClick={() => setIsListView(!isListView)}
               className="flex items-center gap-2 whitespace-nowrap"
@@ -92,12 +99,19 @@ const Index = () => {
           </div>
         ) : (
           <div className="h-full relative">
-            <InteractiveMap
-              languages={filteredLanguages}
-              selectedFilter={selectedFilter}
-              mapboxToken={MAPBOX_TOKEN}
-              onLanguageClick={handleLanguageClick}
-            />
+            {mapProvider === 'mapbox' ? (
+              <InteractiveMapMapbox
+                languages={filteredLanguages}
+                selectedFilter={selectedFilter}
+                onLanguageClick={handleLanguageClick}
+              />
+            ) : (
+              <InteractiveMapMaptiler
+                languages={filteredLanguages}
+                selectedFilter={selectedFilter}
+                onLanguageClick={handleLanguageClick}
+              />
+            )}
             
             {/* Map Legend */}
             <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-xs">
@@ -108,7 +122,7 @@ const Index = () => {
                 {classificationFilters.find(f => f.id === selectedFilter)?.description}
               </p>
               <div className="text-xs text-gray-500">
-                Click on language areas to explore details • Zoom for more languages
+                Click on language areas to explore details • Overlapping regions show multiple languages
               </div>
             </div>
 

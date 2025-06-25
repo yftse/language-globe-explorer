@@ -17,6 +17,7 @@ export interface Language {
   grammarNotes: string;
   country: string;
   alternativeNames: string[];
+  geographicArea: number[][][]; // Array of polygon coordinates
 }
 
 export interface ClassificationFilter {
@@ -25,4 +26,4 @@ export interface ClassificationFilter {
   description: string;
 }
 
-export type FilterType = 'family' | 'branch' | 'phonemes' | 'consonants' | 'vowels' | 'syntax' | 'endangerment' | 'region';
+export type FilterType = 'language' | 'family' | 'branch' | 'phonemes' | 'consonants' | 'vowels' | 'syntax' | 'endangerment' | 'region';
