@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
 
-## Project info
+# LinguaMap - Interactive Language Visualization
 
-**URL**: https://lovable.dev/projects/f2f6d0fe-6ff0-405f-abad-8de44fd2070f
+An interactive web application for visualizing world languages and their geographic distributions using both Mapbox and Maptiler mapping services.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Interactive Language Maps**: Visualize language distributions with realistic geographic coverage
+- **Overlapping Regions**: See where multiple languages are spoken in the same area
+- **Multiple Classification Systems**: Filter by language family, individual languages, endangerment status, and more
+- **Comprehensive Language Data**: Includes major world languages plus European and Central Asian minority languages
+- **Dual Map Providers**: Compare Mapbox and Maptiler implementations
 
-**Use Lovable**
+## Language Coverage
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f2f6d0fe-6ff0-405f-abad-8de44fd2070f) and start prompting.
+### Major World Languages
+- Spanish, Mandarin Chinese, Arabic, Japanese, Tibetan, Uyghur, Berber
 
-Changes made via Lovable will be committed automatically to this repo.
+### European Minority Languages
+- West Frisian, Northern Sami, Romansch
 
-**Use your preferred IDE**
+### Caucasian Languages
+- Chechen, Kalmyk
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Central Asian Languages
+- Kazakh, Uzbek, Kyrgyz
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Map Versions
 
-Follow these steps:
+### Maptiler Version (Current)
+- Uses Maptiler tiles and API
+- Enhanced color schemes for all classification systems
+- No ocean area painting
+- Comprehensive European and Central Asian language coverage
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Mapbox Version (Alternative)
+Located in `mapbox-version/` directory
+- Uses Mapbox GL JS
+- Same feature set with Mapbox styling
+- Requires Mapbox access token
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Comparing Results
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. **Current Implementation**: The main application uses Maptiler
+2. **Switch to Mapbox**: Use the version in `mapbox-version/` directory
+3. **Visual Differences**: 
+   - Maptiler uses vector tiles with different styling
+   - Mapbox offers satellite and terrain overlays
+   - Color rendering may vary between providers
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Customizing Painted Areas
+
+### Modifying Language Regions
+1. Edit `src/data/mockLanguages.ts` or `src/data/europeanLanguages.ts`
+2. Update the `geographicArea` property with polygon coordinates:
+   ```typescript
+   geographicArea: [
+     [[longitude1, latitude1], [longitude2, latitude2], ...],
+     // Multiple polygons for non-contiguous areas
+   ]
+   ```
+
+### Adjusting Color Schemes
+1. Edit `src/utils/enhancedColorSchemes.ts`
+2. Modify colors for each classification:
+   ```typescript
+   family: {
+     'Indo-European': '#3B82F6',
+     'Sino-Tibetan': '#EF4444',
+     // Add more families...
+   }
+   ```
+
+### Adding New Languages
+1. Add language objects to appropriate data files
+2. Include all required properties:
+   - Basic info (name, family, speakers)
+   - Geographic area coordinates
+   - Linguistic features (phonemes, syntax)
+   - Classification metadata
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
+
+# Build for production
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+## Project Structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+src/
+├── components/          # React components
+├── data/               # Language data files
+├── utils/              # Utility functions and configurations
+├── types/              # TypeScript type definitions
+└── pages/              # Application pages
+```
 
-**Use GitHub Codespaces**
+## Technologies
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
+- React + TypeScript
+- Mapbox GL JS / Maptiler SDK
 - Tailwind CSS
+- Vite
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/f2f6d0fe-6ff0-405f-abad-8de44fd2070f) and click on Share -> Publish.
+When adding new languages or regions:
+1. Ensure geographic accuracy
+2. Include proper linguistic classification
+3. Add appropriate color coding
+4. Test overlapping regions functionality
+5. Update documentation
 
-## Can I connect a custom domain to my Lovable project?
+## License
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+MIT License - see LICENSE file for details

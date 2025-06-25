@@ -69,7 +69,7 @@ const InteractiveMapMaptiler: React.FC<InteractiveMapMaptilerProps> = ({
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
       <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-lg text-sm font-medium">
-        Maptiler
+        Maptiler - Enhanced Language Areas
       </div>
     </div>
   );

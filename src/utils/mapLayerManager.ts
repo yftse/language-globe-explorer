@@ -1,7 +1,7 @@
 
 import mapboxgl from 'mapbox-gl';
 import { Language, FilterType } from '@/types/language';
-import { getColorForValue } from '@/utils/colorSchemes';
+import { getColorForValue } from '@/utils/enhancedColorSchemes';
 
 export const removeExistingLayers = (map: mapboxgl.Map): void => {
   const existingLayers = ['language-areas', 'language-areas-stroke'];

@@ -2,13 +2,12 @@
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import InteractiveMapMapbox from '@/components/InteractiveMapMapbox';
 import InteractiveMapMaptiler from '@/components/InteractiveMapMaptiler';
 import FilterDropdown from '@/components/FilterDropdown';
 import SearchBar from '@/components/SearchBar';
 import LanguageListView from '@/components/LanguageListView';
 import LanguageDetail from '@/components/LanguageDetail';
-import { mockLanguages, classificationFilters } from '@/data/mockLanguages';
+import { allLanguages, classificationFilters } from '@/data/allLanguages';
 import { Language, FilterType } from '@/types/language';
 import { Menu, Map, Globe } from 'lucide-react';
 
@@ -17,14 +16,13 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isListView, setIsListView] = useState<boolean>(false);
   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
-  const [mapProvider, setMapProvider] = useState<'mapbox' | 'maptiler'>('mapbox');
 
   // Filter languages based on search query
   const filteredLanguages = useMemo(() => {
-    if (!searchQuery.trim()) return mockLanguages;
+    if (!searchQuery.trim()) return allLanguages;
     
     const query = searchQuery.toLowerCase();
-    return mockLanguages.filter(lang =>
+    return allLanguages.filter(lang =>
       lang.name.toLowerCase().includes(query) ||
       lang.family.toLowerCase().includes(query) ||
       lang.branch.toLowerCase().includes(query) ||
@@ -52,7 +50,7 @@ const Index = () => {
       <header className="bg-white shadow-sm border-b border-gray-200 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-gray-900">LinguaMap</h1>
+            <h1 className="text-2xl font-bold text-gray-900">LinguaMap - Maptiler Version</h1>
             <Badge variant="secondary" className="hidden sm:inline-flex">
               {filteredLanguages.length} languages
             </Badge>
@@ -68,14 +66,6 @@ const Index = () => {
               selectedFilter={selectedFilter}
               onFilterChange={setSelectedFilter}
             />
-            <Button
-              variant={mapProvider === 'mapbox' ? "default" : "outline"}
-              onClick={() => setMapProvider(mapProvider === 'mapbox' ? 'maptiler' : 'mapbox')}
-              className="flex items-center gap-2 whitespace-nowrap"
-            >
-              <Globe className="h-4 w-4" />
-              {mapProvider === 'mapbox' ? 'Switch to Maptiler' : 'Switch to Mapbox'}
-            </Button>
             <Button
               variant={isListView ? "default" : "outline"}
               onClick={() => setIsListView(!isListView)}
@@ -99,19 +89,11 @@ const Index = () => {
           </div>
         ) : (
           <div className="h-full relative">
-            {mapProvider === 'mapbox' ? (
-              <InteractiveMapMapbox
-                languages={filteredLanguages}
-                selectedFilter={selectedFilter}
-                onLanguageClick={handleLanguageClick}
-              />
-            ) : (
-              <InteractiveMapMaptiler
-                languages={filteredLanguages}
-                selectedFilter={selectedFilter}
-                onLanguageClick={handleLanguageClick}
-              />
-            )}
+            <InteractiveMapMaptiler
+              languages={filteredLanguages}
+              selectedFilter={selectedFilter}
+              onLanguageClick={handleLanguageClick}
+            />
             
             {/* Map Legend */}
             <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-xs">
