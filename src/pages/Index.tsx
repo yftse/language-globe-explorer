@@ -9,7 +9,7 @@ import LanguageListView from '@/components/LanguageListView';
 import LanguageDetail from '@/components/LanguageDetail';
 import { allLanguages, classificationFilters } from '@/data/allLanguages';
 import { Language, FilterType } from '@/types/language';
-import { Menu, Map, Globe } from 'lucide-react';
+import { Menu, Map } from 'lucide-react';
 
 const Index = () => {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('family');
