@@ -1,19 +1,15 @@
 
-import mapboxgl from 'mapbox-gl';
+import maplibregl from 'maplibre-gl';
 
-// Set the Maptiler API key directly
-mapboxgl.accessToken = 'pk.dummy'; // Required to prevent Mapbox errors
-
-export const createMaptilerMap = (container: HTMLDivElement): mapboxgl.Map => {
-  return new mapboxgl.Map({
+export const createMaptilerMap = (container: HTMLDivElement): maplibregl.Map => {
+  return new maplibregl.Map({
     container,
-    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=gyNfeRRGKgZuqBD5plxn`,
+    style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=gyNfeRRGKgZuqBD5plxn',
     center: [0, 20],
-    zoom: 2,
-    projection: 'globe'
+    zoom: 2
   });
 };
 
-export const addNavigationControl = (map: mapboxgl.Map): void => {
-  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+export const addNavigationControl = (map: maplibregl.Map): void => {
+  map.addControl(new maplibregl.NavigationControl(), 'top-right');
 };

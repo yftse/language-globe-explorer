@@ -1,9 +1,9 @@
 
-import mapboxgl from 'mapbox-gl';
+import maplibregl from 'maplibre-gl';
 import { Language, FilterType } from '@/types/language';
 import { getColorForValue } from '@/utils/enhancedColorSchemes';
 
-export const removeExistingLayers = (map: mapboxgl.Map): void => {
+export const removeExistingLayers = (map: maplibregl.Map): void => {
   const existingLayers = ['language-areas', 'language-areas-stroke'];
   const existingSources = ['language-areas'];
 
@@ -54,7 +54,7 @@ export const createLanguageAreasData = (
   };
 };
 
-export const addLanguageAreasLayers = (map: mapboxgl.Map, languageAreas: any): void => {
+export const addLanguageAreasLayers = (map: maplibregl.Map, languageAreas: any): void => {
   // Add language areas source
   map.addSource('language-areas', {
     type: 'geojson',

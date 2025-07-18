@@ -1,15 +1,16 @@
 
-import mapboxgl from 'mapbox-gl';
+import maplibregl from 'maplibre-gl';
 import { Language } from '@/types/language';
 
 export const createMapEventHandlers = (
-  map: mapboxgl.Map,
+  map: maplibregl.Map,
   languages: Language[],
   onLanguageClick: (language: Language) => void
 ) => {
-  const handleAreaClick = (e: mapboxgl.MapMouseEvent) => {
-    if (e.features && e.features[0]) {
-      const feature = e.features[0];
+  const handleAreaClick = (e: maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: ['language-areas'] });
+    if (features && features[0]) {
+      const feature = features[0];
       const languageId = feature.properties?.id;
       const language = languages.find(lang => lang.id === languageId);
       if (language) {

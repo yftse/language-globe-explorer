@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { Language, FilterType } from '@/types/language';
 import { createMaptilerMap, addNavigationControl } from '@/utils/maptilerConfig';
 import { removeExistingLayers, createLanguageAreasData, addLanguageAreasLayers } from '@/utils/mapLayerManager';
@@ -18,7 +18,7 @@ const InteractiveMapMaptiler: React.FC<InteractiveMapMaptilerProps> = ({
   onLanguageClick
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<maplibregl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const eventHandlers = useRef<any>(null);
 
