@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Language, FilterType } from '@/types/language';
 import { createMaptilerMap, addNavigationControl } from '@/utils/maptilerConfig';
-import { removeExistingLayers, createLanguageAreasData, addLanguageAreasLayers } from '@/utils/mapLayerManager';
+import { removeExistingLayers, addLanguageAreasLayers } from '@/utils/mapLayerManager';
 import { createMapEventHandlers } from '@/utils/mapEventHandlers';
 
 interface InteractiveMapMaptilerProps {
@@ -68,9 +68,8 @@ const InteractiveMapMaptiler: React.FC<InteractiveMapMaptilerProps> = ({
       }
       removeExistingLayers(map.current);
 
-      // Create and add new layers
-      const languageAreas = createLanguageAreasData(languages, selectedFilter);
-      addLanguageAreasLayers(map.current, languageAreas);
+      // Add new layers using Maptiler's administrative boundaries
+      addLanguageAreasLayers(map.current, languages, selectedFilter);
 
       // Set up event handlers
       eventHandlers.current = createMapEventHandlers(map.current, languages, onLanguageClick);
