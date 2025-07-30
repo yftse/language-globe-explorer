@@ -8,13 +8,28 @@ export const createMapEventHandlers = (
   onLanguageClick: (language: Language) => void
 ) => {
   const handleAreaClick = (e: maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }) => {
-    const features = map.queryRenderedFeatures(e.point, { layers: ['language-areas'] });
+    // Check multiple layer types for language areas
+    const features = map.queryRenderedFeatures(e.point, { 
+      layers: ['language-countries', 'language-subdivisions'] 
+    });
+    
     if (features && features[0]) {
       const feature = features[0];
-      const languageId = feature.properties?.id;
-      const language = languages.find(lang => lang.id === languageId);
+      const regionName = feature.properties?.name;
+      
+      // Find language by region name
+      const language = languages.find(lang => {
+        // Check if language matches this region
+        return lang.country === regionName || 
+               lang.geographicArea?.some((area: any) => area.regionName === regionName) ||
+               lang.alternativeNames?.some((name: string) => name === regionName);
+      });
+      
       if (language) {
+        console.log('Language clicked:', language.name, 'in region:', regionName);
         onLanguageClick(language);
+      } else {
+        console.log('No language found for region:', regionName);
       }
     }
   };
@@ -28,15 +43,23 @@ export const createMapEventHandlers = (
   };
 
   const addEventListeners = () => {
-    map.on('click', 'language-areas', handleAreaClick);
-    map.on('mouseenter', 'language-areas', setCursorPointer);
-    map.on('mouseleave', 'language-areas', setCursorDefault);
+    // Add click events for both country and subdivision layers
+    map.on('click', 'language-countries', handleAreaClick);
+    map.on('click', 'language-subdivisions', handleAreaClick);
+    map.on('mouseenter', 'language-countries', setCursorPointer);
+    map.on('mouseenter', 'language-subdivisions', setCursorPointer);
+    map.on('mouseleave', 'language-countries', setCursorDefault);
+    map.on('mouseleave', 'language-subdivisions', setCursorDefault);
   };
 
   const removeEventListeners = () => {
-    map.off('click', 'language-areas', handleAreaClick);
-    map.off('mouseenter', 'language-areas', setCursorPointer);
-    map.off('mouseleave', 'language-areas', setCursorDefault);
+    // Remove click events for both country and subdivision layers
+    map.off('click', 'language-countries', handleAreaClick);
+    map.off('click', 'language-subdivisions', handleAreaClick);
+    map.off('mouseenter', 'language-countries', setCursorPointer);
+    map.off('mouseenter', 'language-subdivisions', setCursorPointer);
+    map.off('mouseleave', 'language-countries', setCursorDefault);
+    map.off('mouseleave', 'language-subdivisions', setCursorDefault);
   };
 
   return {

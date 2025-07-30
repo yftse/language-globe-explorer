@@ -21,13 +21,12 @@ export const removeExistingLayers = (map: maplibregl.Map): void => {
 const regionLanguageMap: Record<string, string[]> = {
   // Countries - Major world languages
   'United States': ['English'],
-  'United Kingdom': ['English'],
+  'United Kingdom': ['English', 'Welsh', 'Scottish Gaelic'],
   'Canada': ['English', 'French'],
   'Australia': ['English'],
   'New Zealand': ['English'],
-  'Ireland': ['English'],
   'South Africa': ['English'],
-  'Spain': ['Spanish'],
+  'Spain': ['Spanish', 'Catalan', 'Galician', 'Basque'],
   'Mexico': ['Spanish'],
   'Argentina': ['Spanish'],
   'Colombia': ['Spanish'],
@@ -136,7 +135,27 @@ const regionLanguageMap: Record<string, string[]> = {
   'Java': ['Javanese'],
   'West Java': ['Sundanese'],
   'Luzon': ['Tagalog'],
-  'Mindanao': ['Tagalog']
+  'Mindanao': ['Tagalog'],
+  
+  // European and Celtic languages
+  'Wales': ['Welsh'],
+  'Ireland': ['Irish Gaelic'],
+  'Scotland': ['Scottish Gaelic'],
+  'Netherlands': ['Dutch', 'West Frisian'],
+  'Norway': ['Northern Sami'],
+  'Sweden': ['Northern Sami'],
+  'Finland': ['Northern Sami'],
+  'Switzerland': ['German', 'French', 'Italian', 'Romansch'],
+  'Friesland': ['West Frisian'],
+  'Kalmykia': ['Kalmyk'],
+  'Chechnya': ['Chechen'],
+  'Catalonia': ['Catalan'],
+  'Galicia': ['Galician'],
+  'Basque Country': ['Basque'],
+  'Euskadi': ['Basque'],
+  'Cymru': ['Welsh'],
+  'Alba': ['Scottish Gaelic'],
+  'Éire': ['Irish Gaelic']
 };
 
 export const addLanguageAreasLayers = (map: maplibregl.Map, languages: Language[], selectedFilter: FilterType): void => {

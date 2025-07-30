@@ -4,25 +4,78 @@ import { FilterType } from '@/types/language';
 // Enhanced color schemes for all classification systems
 export const enhancedColorSchemes = {
   language: {
-    // Original languages
+    // Major world languages
     'Spanish': '#3B82F6', // Blue
-    'Mandarin Chinese': '#EF4444', // Red
-    'Modern Standard Arabic': '#F59E0B', // Orange
-    'Berber (Tamazight)': '#8B5CF6', // Purple
-    'Basque': '#EC4899', // Pink
-    'Tibetan': '#10B981', // Green
-    'Uyghur': '#F97316', // Dark orange
+    'English': '#059669', // Emerald
+    'Mandarin': '#EF4444', // Red
+    'Arabic': '#F59E0B', // Orange
+    'Portuguese': '#8B5CF6', // Purple
+    'French': '#EC4899', // Pink
+    'Russian': '#0891B2', // Cyan
+    'German': '#CA8A04', // Yellow
     'Japanese': '#6366F1', // Indigo
-    // European languages
-    'West Frisian': '#059669', // Emerald
-    'Northern Sami': '#7C3AED', // Violet
-    'Romansch': '#DC2626', // Red
-    'Kalmyk': '#0891B2', // Cyan
-    'Chechen': '#BE123C', // Rose
+    'Korean': '#BE123C', // Rose
+    'Italian': '#DC2626', // Dark red
+    'Turkish': '#9333EA', // Purple
+    'Polish': '#0D9488', // Teal
+    'Ukrainian': '#7C3AED', // Violet
+    'Romanian': '#F97316', // Dark orange
+    'Persian': '#10B981', // Green
+    // Chinese languages
+    'Yue (Cantonese)': '#EF4444',
+    'Wu (Shanghainese)': '#DC2626',
+    'Southern Min': '#991B1B',
+    'Xiang (Hunanese)': '#7F1D1D',
+    'Hakka': '#450A0A',
+    'Jin': '#FCA5A5',
+    // Indian languages
+    'Hindi': '#F59E0B',
+    'Bengali': '#F97316',
+    'Telugu': '#EA580C',
+    'Marathi': '#C2410C',
+    'Tamil': '#9A3412',
+    'Gujarati': '#7C2D12',
+    'Kannada': '#451A03',
+    'Malayalam': '#FED7AA',
+    'Urdu': '#FDBA74',
+    'Punjabi': '#FB923C',
+    'Odia (Oriya)': '#F97316',
+    'Awadhi': '#EA580C',
+    'Bhojpuri': '#C2410C',
+    'Maithili': '#9A3412',
+    'Sindhi': '#7C2D12',
+    // African languages
+    'Hausa': '#10B981',
+    'Yoruba': '#059669',
+    'Igbo': '#047857',
+    'Amharic': '#065F46',
+    'Oromo': '#064E3B',
+    'Fula': '#022C22',
+    // Southeast Asian languages
+    'Vietnamese': '#8B5CF6',
+    'Thai': '#7C3AED',
+    'Burmese': '#6D28D9',
+    'Tagalog': '#5B21B6',
+    'Javanese': '#4C1D95',
+    'Sundanese': '#3730A3',
     // Central Asian languages
-    'Kazakh': '#CA8A04', // Yellow
-    'Uzbek': '#9333EA', // Purple
-    'Kyrgyz': '#0D9488', // Teal
+    'Uzbek': '#EC4899',
+    'Azerbaijani': '#DB2777',
+    'Kazakh': '#BE185D',
+    'Kyrgyz': '#9D174D',
+    'Pashto': '#831843',
+    // European minority languages
+    'Welsh': '#059669',
+    'Irish Gaelic': '#047857',
+    'Scottish Gaelic': '#065F46',
+    'Basque': '#064E3B',
+    'Catalan': '#022C22',
+    'Galician': '#16A34A',
+    'West Frisian': '#15803D',
+    'Northern Sami': '#166534',
+    'Romansch': '#14532D',
+    'Kalmyk': '#052E16',
+    'Chechen': '#BBF7D0',
     'default': '#6B7280' // Gray
   },
   family: {
@@ -35,11 +88,17 @@ export const enhancedColorSchemes = {
     'Uralic': '#059669', // Emerald
     'Mongolic': '#0891B2', // Cyan
     'Northeast Caucasian': '#BE123C', // Rose
+    'Niger-Congo': '#7C3AED', // Violet
+    'Austronesian': '#CA8A04', // Yellow
+    'Koreanic': '#F97316', // Dark orange
+    'Tai-Kadai': '#DC2626', // Dark red
     'default': '#6B7280' // Gray
   },
   branch: {
     'Romance': '#3B82F6', // Blue
     'Germanic': '#059669', // Emerald
+    'Celtic': '#047857', // Dark emerald
+    'Slavic': '#065F46', // Very dark emerald
     'Sinitic': '#EF4444', // Red
     'Tibetic': '#DC2626', // Dark red
     'Semitic': '#F59E0B', // Orange
@@ -48,9 +107,16 @@ export const enhancedColorSchemes = {
     'Kipchak': '#CA8A04', // Yellow
     'Karluk': '#9333EA', // Purple
     'Japanese': '#EC4899', // Pink
+    'Korean': '#F97316', // Dark orange
     'Samic': '#7C3AED', // Violet
     'Western Mongolic': '#0891B2', // Cyan
     'Nakh': '#BE123C', // Rose
+    'Volta-Niger': '#6D28D9', // Purple
+    'Cushitic': '#5B21B6', // Dark purple
+    'Malayo-Polynesian': '#4C1D95', // Very dark purple
+    'Tai': '#3730A3', // Indigo
+    'Sino-Tibetan': '#1E1B4B', // Very dark indigo
+    'Basque': '#064E3B', // Dark green
     'N/A': '#6B7280', // Gray
     'default': '#6B7280'
   },

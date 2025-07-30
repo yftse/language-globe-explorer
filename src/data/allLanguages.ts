@@ -1,8 +1,9 @@
 
 import { Language } from '@/types/language';
 import { worldLanguages } from './worldLanguages';
+import { europeanLanguages } from './europeanLanguages';
 
-export const allLanguages: Language[] = worldLanguages;
+export const allLanguages: Language[] = [...worldLanguages, ...europeanLanguages];
 
 export const classificationFilters = [
   { id: 'language', name: 'Individual Language', description: 'Each language shown separately' },
