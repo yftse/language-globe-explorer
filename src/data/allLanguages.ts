@@ -1,9 +1,20 @@
 
 import { Language } from '@/types/language';
-import { worldLanguages } from './worldLanguages';
 import { europeanLanguages } from './europeanLanguages';
+import { asianLanguages } from './asianLanguages';
+import { africanLanguages } from './africanLanguages';
+import { americanLanguages } from './americanLanguages';
+import { oceanicLanguages } from './oceanicLanguages';
+import { centralAsianLanguages } from './centralAsianLanguages';
 
-export const allLanguages: Language[] = [...worldLanguages, ...europeanLanguages];
+export const allLanguages: Language[] = [
+  ...europeanLanguages, 
+  ...asianLanguages, 
+  ...africanLanguages, 
+  ...americanLanguages, 
+  ...oceanicLanguages, 
+  ...centralAsianLanguages
+];
 
 export const classificationFilters = [
   { id: 'language', name: 'Individual Language', description: 'Each language shown separately' },
