@@ -50,7 +50,7 @@ const Index = () => {
       <header className="bg-white shadow-sm border-b border-gray-200 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-gray-900">LinguaMap - Maptiler Version</h1>
+            <h1 className="text-2xl font-bold text-gray-900">LinguisticMap </h1>
             <Badge variant="secondary" className="hidden sm:inline-flex">
               {filteredLanguages.length} languages
             </Badge>
