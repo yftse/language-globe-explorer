@@ -8,29 +8,39 @@ export const createMapEventHandlers = (
   onLanguageClick: (language: Language) => void
 ) => {
   const handleAreaClick = (e: maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }) => {
+    console.log('Area clicked at:', e.lngLat);
+    
     // Check multiple layer types for language areas
     const features = map.queryRenderedFeatures(e.point, { 
       layers: ['language-countries', 'language-subdivisions'] 
     });
     
+    console.log('Features found:', features?.length || 0);
+    
     if (features && features[0]) {
       const feature = features[0];
-      const regionName = feature.properties?.name;
+      const regionName = feature.properties?.name || feature.properties?.name_en;
+      console.log('Region clicked:', regionName, 'Properties:', feature.properties);
       
-      // Find language by region name
+      // Find language by region name using a more flexible matching approach
       const language = languages.find(lang => {
-        // Check if language matches this region
-        return lang.country === regionName || 
-               lang.geographicArea?.some((area: any) => area.regionName === regionName) ||
-               lang.alternativeNames?.some((name: string) => name === regionName);
+        const countryMatch = lang.country === regionName;
+        const altNameMatch = lang.alternativeNames?.some((name: string) => 
+          name.toLowerCase() === regionName?.toLowerCase()
+        );
+        
+        console.log(`Checking language ${lang.name}: country=${lang.country}, altNames=${lang.alternativeNames?.join(', ')}`);
+        return countryMatch || altNameMatch;
       });
       
       if (language) {
-        console.log('Language clicked:', language.name, 'in region:', regionName);
+        console.log('Language found and clicked:', language.name, 'in region:', regionName);
         onLanguageClick(language);
       } else {
-        console.log('No language found for region:', regionName);
+        console.log('No language found for region:', regionName, 'Available languages:', languages.map(l => l.name).join(', '));
       }
+    } else {
+      console.log('No features found at click point');
     }
   };
 
