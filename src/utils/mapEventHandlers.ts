@@ -40,7 +40,8 @@ export const createMapEventHandlers = (
            // Handle country codes like "DZ" for Algeria
            (feature.properties.iso_a2 === 'DZ' && lang.country.includes('Algeria')) ||
            (feature.properties.iso_a2 === 'CN' && lang.country.includes('China')) ||
-           (feature.properties.iso_a2 === 'IN' && lang.country.includes('India')));
+           (feature.properties.iso_a2 === 'IN' && lang.country.includes('India')) ||
+           (feature.properties.iso_a2 === 'FR' && lang.country.includes('France')));
         
         console.log(`Checking language ${lang.name}: country=${lang.country}, region=${regionName}, parentCountry=${feature.properties?.level_0}, iso=${feature.properties?.iso_a2}`);
         return countryMatch || altNameMatch || parentCountryMatch;
