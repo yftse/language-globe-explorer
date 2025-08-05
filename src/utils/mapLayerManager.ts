@@ -141,18 +141,6 @@ const regionLanguageMap: Record<string, string[]> = {
   'Mindanao': ['Tagalog'],
   
   // European and Celtic languages
-  'Pays de la Loire': ['French'],
-  'Ile-de-France': ['French'],
-  'Bretagne': ['French'],
-  'Normandie': ['French'],
-  'Provence-Alpes-Côte d\'Azur': ['French'],
-  'Occitanie': ['French'],
-  'Nouvelle-Aquitaine': ['French'],
-  'Auvergne-Rhône-Alpes': ['French'],
-  'Bourgogne-Franche-Comté': ['French'],
-  'Centre-Val de Loire': ['French'],
-  'Grand Est': ['French'],
-  'Hauts-de-France': ['French'],
   'Wales': ['Welsh'],
   'Ireland': ['Irish Gaelic'],
   'Scotland': ['Scottish Gaelic'],

@@ -24,27 +24,28 @@ export const createMapEventHandlers = (
       
       // Find language by region name using multiple strategies
       const language = languages.find(lang => {
-        // Strategy 1: Direct country match
-        const countryMatch = lang.country === regionName;
+        // Strategy 1: Exact country match (prioritize this)
+        const exactCountryMatch = lang.country === regionName;
+        if (exactCountryMatch) return true;
         
         // Strategy 2: Alternative names match
         const altNameMatch = lang.alternativeNames?.some((name: string) => 
           name.toLowerCase() === regionName?.toLowerCase()
         );
+        if (altNameMatch) return true;
         
         // Strategy 3: Check if the clicked region belongs to the language's country
         // For subdivisions like "Ghardaïa" in Algeria, check if country contains "Algeria"
         const parentCountryMatch = feature.properties?.level_0 && 
-          (lang.country.includes(feature.properties.level_0) || 
-           feature.properties.level_0.includes(lang.country.split('/')[0]) ||
+          (lang.country === feature.properties.level_0 || 
            // Handle country codes like "DZ" for Algeria
-           (feature.properties.iso_a2 === 'DZ' && lang.country.includes('Algeria')) ||
-           (feature.properties.iso_a2 === 'CN' && lang.country.includes('China')) ||
-           (feature.properties.iso_a2 === 'IN' && lang.country.includes('India')) ||
-           (feature.properties.iso_a2 === 'FR' && lang.country.includes('France')));
+           (feature.properties.iso_a2 === 'DZ' && lang.country === 'Algeria') ||
+           (feature.properties.iso_a2 === 'CN' && lang.country === 'China') ||
+           (feature.properties.iso_a2 === 'IN' && lang.country === 'India') ||
+           (feature.properties.iso_a2 === 'FR' && lang.country === 'France'));
         
         console.log(`Checking language ${lang.name}: country=${lang.country}, region=${regionName}, parentCountry=${feature.properties?.level_0}, iso=${feature.properties?.iso_a2}`);
-        return countryMatch || altNameMatch || parentCountryMatch;
+        return parentCountryMatch;
       });
       
       if (language) {

@@ -62,24 +62,4 @@ export const americanLanguages: Language[] = [
     alternativeNames: ['English'],
     geographicArea: [[[0, 0]]]
   },
-  {
-    id: 'french_americas',
-    name: 'French',
-    coordinates: [-73.6, 45.5],
-    family: 'Indo-European',
-    branch: 'Romance',
-    speakers: 280000000,
-    endangermentStatus: 'safe',
-    region: 'Americas',
-    script: 'Latin',
-    alphabet: 'Latin',
-    phonemes: ['p', 'b', 't', 'd', 'k', 'g', 'f', 'v', 's', 'z', 'ʃ', 'ʒ', 'm', 'n', 'ɲ', 'ŋ', 'l', 'r', 'w', 'ɥ', 'j'],
-    consonants: ['p', 'b', 't', 'd', 'k', 'g', 'f', 'v', 's', 'z', 'ʃ', 'ʒ', 'm', 'n', 'ɲ', 'ŋ', 'l', 'r', 'w', 'ɥ', 'j'],
-    vowels: ['i', 'e', 'ɛ', 'a', 'ɑ', 'ɔ', 'o', 'u', 'y', 'ø', 'œ', 'ə', 'ɛ̃', 'ɑ̃', 'ɔ̃', 'œ̃'],
-    syntaxFeatures: ['SVO word order', 'Gendered nouns', 'Liaison'],
-    grammarNotes: 'French has complex liaison rules and nasal vowels.',
-    country: 'Canada',
-    alternativeNames: ['Français'],
-    geographicArea: [[[0, 0]]]
-  }
 ];
