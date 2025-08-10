@@ -66,13 +66,9 @@ export const createMapEventHandlers = (
     map.getCanvas().style.cursor = '';
   };
 
-  const renderTooltipHtml = (title: string, langNames: string[]) => {
-    const items = langNames.map((n) => `<li>${n}</li>`).join('');
+  const renderTooltipHtml = (language: string) => {
     return `
-      <div aria-live="polite">
-        <div style="font-weight:600;margin-bottom:4px;">${title}</div>
-        <ul style="padding-left:16px;margin:0;">${items}</ul>
-      </div>
+      <div aria-live="polite" style="font-weight:600;">${language}</div>
     `;
   };
 
@@ -80,7 +76,7 @@ export const createMapEventHandlers = (
     e: maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }
   ) => {
     const features = map.queryRenderedFeatures(e.point, {
-      layers: ['language-countries', 'language-subdivisions'],
+      layers: ['language-countries'],
     });
 
     if (!features || !features[0]) return;
@@ -95,8 +91,8 @@ export const createMapEventHandlers = (
 
     if (matched.length === 0) return;
 
-    const html = renderTooltipHtml(regionName, matched);
-
+    const primary = matched[0];
+    const html = renderTooltipHtml(primary);
     if (!hoverPopup) {
       hoverPopup = new maplibregl.Popup({
         closeButton: false,
@@ -134,7 +130,6 @@ export const createMapEventHandlers = (
 
     // Hover tooltips
     map.on('mousemove', 'language-countries', handleMouseMove);
-    map.on('mousemove', 'language-subdivisions', handleMouseMove);
   };
 
   const removeEventListeners = () => {
